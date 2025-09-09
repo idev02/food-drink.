@@ -1,0 +1,279 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width,initial-scale=1" />
+  <title>Food & Drink</title>
+  
+  <!-- Fonts & Icons -->
+  <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;600;700;800&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.2/css/all.min.css"/>
+
+  <style>
+    :root{
+      --brand:#ff4d00;
+      --brand-2:#ffae00;
+      --bg:#fff8f5;
+      --text:#1d1d1f;
+      --card:#ffffff;
+      --radius:18px;
+      --shadow:0 10px 30px rgba(0,0,0,.08);
+    }
+    *{box-sizing:border-box}
+    body{margin:0;font-family:Poppins,Arial;color:var(--text);background:var(--bg)}
+    a{text-decoration:none;color:inherit}
+    img{max-width:100%;display:block}
+    .container{max-width:1200px;margin:0 auto;padding:0 20px}
+
+    /* Navbar */
+    .topbar{background:#fff;border-bottom:1px solid #eee;position:sticky;top:0;z-index:10}
+    .nav{display:flex;align-items:center;justify-content:space-between;height:68px}
+    .brand{display:flex;align-items:center;gap:10px;font-weight:800;font-size:22px;color:var(--brand)}
+    .brand img.logo{height:40px;width:auto}
+    .menu{display:flex;gap:28px;align-items:center}
+    .menu a{font-weight:600;color:#111;opacity:.8}
+    .menu a.active{color:var(--brand)}
+    .hamburger{display:none;cursor:pointer;font-size:24px}
+    .cart-btn{position:relative;cursor:pointer;font-size:20px;color:var(--brand)}
+    .cart-count{position:absolute;top:-6px;right:-10px;background:red;color:#fff;font-size:12px;font-weight:700;padding:2px 6px;border-radius:50%}
+
+    /* Hero */
+    .hero{background:linear-gradient(90deg,#e63c1b,#ff6a00);color:#fff}
+    .hero-wrap{display:grid;grid-template-columns:1fr 1fr;gap:30px;align-items:center;padding:48px 0}
+    .hero h1{font-size:44px;font-weight:800;margin:.3rem 0 1rem}
+    .hero p{max-width:48ch;color:#fffa}
+
+    /* Search */
+    .search-row{display:flex;gap:10px;background:#fff;padding:10px;border-radius:12px;box-shadow:var(--shadow);max-width:580px}
+    .search-row select,.search-row input{border:1px solid #eee;border-radius:10px;padding:12px;font:inherit;flex:1}
+    .search-row input{flex:2}
+    .search-row button{background:#111;color:#fff;border:0;padding:12px 20px;border-radius:10px;font-weight:700;cursor:pointer}
+
+    /* Catalog */
+    .section{
+        padding:46px 0
+        }
+    .catalog{
+        display:grid;
+        grid-template-columns:240px 1fr;
+        gap:22px
+    }
+    .cats{
+        background:#fff;
+        border-radius:var(--radius);
+        box-shadow:var(--shadow);
+        padding:14px
+    }
+    .cat-item{
+        padding:12px 10px;
+        border-radius:12px;
+        cursor:pointer;
+        font-weight:600;
+        color:#111
+    }
+    .cat-item.active,.cat-item:hover{
+        background:linear-gradient(90deg,#fff4ec,#ffffff);
+        outline:2px solid #ffe1cf
+    }
+    .grid{display:grid;grid-template-columns:repeat(3,1fr);gap:18px}
+    .card{background:var(--card);border-radius:var(--radius);box-shadow:var(--shadow);overflow:hidden;display:flex;flex-direction:column}
+    .thumb img{width:50%;height:50px;object-fit:cover; display: block;}
+    .card-body{padding:14px}
+    .title{font-weight:700;margin:0 0 4px}
+    .price{font-weight:800}
+    .card-foot{display:flex;justify-content:space-between;align-items:center;padding:0 10px 12px}
+    .btn{background:var(--brand);color:#fff;padding:8px 14px;border-radius:12px;font-weight:700;cursor:pointer;border:0}
+
+    /* Cart Modal */
+    .cart-modal{position:fixed;right:0;top:0;width:350px;height:100%;background:#fff;box-shadow:-4px 0 10px rgba(0,0,0,.2);transform:translateX(100%);transition:.3s;z-index:100;padding:20px;display:flex;flex-direction:column}
+    .cart-modal.show{transform:translateX(0)}
+    .cart-header{display:flex;justify-content:space-between;align-items:center;margin-bottom:10px}
+    .cart-items{flex:1;overflow-y:auto}
+    .cart-item{display:flex;justify-content:space-between;align-items:center;margin:10px 0;border-bottom:1px solid #eee;padding-bottom:6px}
+    .cart-item span{font-size:14px}
+    .cart-total{font-weight:700;margin:10px 0}
+    .checkout-btn{background:#ff6a00;color:#fff;padding:12px;border-radius:10px;font-weight:700;cursor:pointer;text-align:center}
+
+    /* Responsive */
+    @media(max-width:900px){
+      .catalog{grid-template-columns:1fr}
+      .grid{grid-template-columns:repeat(2,1fr)}
+    }
+    @media(max-width:560px){
+      .grid{grid-template-columns:1fr}
+      .hamburger{display:block}
+      .menu{display:none;flex-direction:column;position:absolute;top:68px;right:0;background:#fff;width:200px;border:1px solid #eee;border-radius:12px;padding:10px}
+      .menu.show{display:flex}
+      .thumb img {
+        width: 170%;
+        height: 300px;   /* tinggi gambar lebih kecil */
+        object-fit: cover;
+        border-radius: 10px; /* opsional: bikin sudut melengkung */ 
+        }
+    /* kecilkan foto produk di mobile */
+      .brand img.logo{height:70px} /* kecilkan logo di mobile */
+    }
+  </style>
+</head>
+<body>
+  <header class="topbar">
+    <div class="container nav">
+      <a class="brand" href="#"><img src="image/logo.png" alt="Logo" class="logo"> Food & Drink</a>
+      <nav class="menu">
+        <a class="active" href="#">Home</a>
+        <a href="#menu">Menu</a>
+      </nav>
+      <div style="display:flex;align-items:center;gap:15px">
+        <div class="cart-btn" onclick="toggleCart()"><i class="fa-solid fa-cart-shopping"></i><span id="cartCount" class="cart-count">0</span></div>
+        <div class="hamburger" onclick="toggleMenu()"><i class="fa-solid fa-bars"></i></div>
+      </div>
+    </div>
+  </header>
+
+  <!-- Hero -->
+  <section class="hero">
+    <div class="container hero-wrap">
+      <div>
+        <h1>Pesan Makanan Favoritmu</h1>
+        <p>Cari dan pesan makanan serta minuman dengan cepat, lalu langsung checkout ke WhatsApp.</p>
+        <div class="search-row">
+          <select id="categorySelect">
+            <option value="all">Semua</option>
+            <option value="makanan">Makanan</option>
+            <option value="minuman">Minuman</option>
+          </select>
+          <input id="searchInput" type="text" placeholder="Cari makanan...">
+          <button id="btnCheck">Cari</button>
+        </div>
+      </div>
+      <img src="https://cdn-icons-png.flaticon.com/512/2921/2921822.png" alt="Hero">
+    </div>
+  </section>
+
+  <!-- Menu -->
+  <section id="menu" class="section">
+    <div class="container catalog">
+      <aside class="cats">
+        <div class="cat-item active" data-cat="all">Semua</div>
+        <div class="cat-item" data-cat="makanan">Makanan</div>
+        <div class="cat-item" data-cat="minuman">Minuman</div>
+      </aside>
+      <div class="grid" id="productGrid">
+        <div class="card" data-cat="makanan" data-name="Pisang Kembung" data-price="10000">
+          <div class="thumb"><img src="image/piscok.jpg" alt=""></div>
+          <div class="card-body"><h3 class="title">Pisang Kembung</h3><div class="price">Rp 10.000</div></div>
+          <div class="card-foot"><button class="btn" onclick="addToCart(this)">Tambah</button></div>
+        </div>
+        <div class="card" data-cat="makanan" data-name="Sandwich Ubi Ungu" data-price="15000">
+          <div class="thumb"><img src="image/sandwich.png" alt=""></div>
+          <div class="card-body"><h3 class="title">Sandwich Ubi Ungu</h3><div class="price">Rp 15.000</div></div>
+          <div class="card-foot"><button class="btn" onclick="addToCart(this)">Tambah</button></div>
+        </div>
+        <div class="card" data-cat="minuman" data-name="Es Mojito" data-price="8000">
+          <div class="thumb"><img src="image/es mojito.png" alt=""></div>
+          <div class="card-body"><h3 class="title">Es Mojito</h3><div class="price">Rp 8.000</div></div>
+          <div class="card-foot"><button class="btn" onclick="addToCart(this)">Tambah</button></div>
+        </div>
+        <div class="card" data-cat="minuman" data-name="Es Coksu" data-price="7000">
+          <div class="thumb"><img src="image/es-coklat-susu-1024x614.jpg" alt=""></div>
+          <div class="card-body"><h3 class="title">Es Coksu</h3><div class="price">Rp 7.000</div></div>
+          <div class="card-foot"><button class="btn" onclick="addToCart(this)">Tambah</button></div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- Cart -->
+  <div id="cartModal" class="cart-modal">
+    <div class="cart-header">
+      <h3>Keranjang</h3>
+      <span style="cursor:pointer" onclick="toggleCart()">&times;</span>
+    </div>
+    <div id="cartItems" class="cart-items"></div>
+    <div id="cartTotal" class="cart-total">Total: Rp0</div>
+    <div class="checkout-btn" onclick="checkout()">Checkout</div>
+  </div>
+
+  <footer style="text-align:center;padding:20px;color:#777">© <span id="year"></span> Food & Drink</footer>
+
+<script>
+  const WHATSAPP_NUMBER = '6285932621734'; // ganti dengan nomor WA kamu
+  document.getElementById('year').textContent = new Date().getFullYear();
+
+  // Navbar
+  function toggleMenu(){document.querySelector('.menu').classList.toggle('show');}
+
+  // Filter kategori
+  const grid = document.getElementById('productGrid');
+  const cards = Array.from(grid.children);
+  const catList = document.querySelectorAll('.cat-item');
+  catList.forEach(c=>{
+    c.addEventListener('click',()=>{
+      document.querySelectorAll('.cat-item').forEach(ci=>ci.classList.remove('active'));
+      c.classList.add('active');
+      const cat=c.dataset.cat;
+      cards.forEach(card=>{
+        card.style.display=(cat==='all'||card.dataset.cat===cat)?'flex':'none';
+      });
+    });
+  });
+
+  // Search
+  document.getElementById('btnCheck').addEventListener('click',()=>{
+    const q=document.getElementById('searchInput').value.trim().toLowerCase();
+    const cat=document.getElementById('categorySelect').value;
+    cards.forEach(c=>{
+      const matchCat=(cat==='all'||c.dataset.cat===cat);
+      const matchName=c.dataset.name.toLowerCase().includes(q);
+      c.style.display=(matchCat&&matchName)?'flex':'none';
+    });
+  });
+
+  // Cart
+  let cart=[];
+  function addToCart(btn){
+    const card=btn.closest('.card');
+    const name=card.dataset.name;
+    const price=parseInt(card.dataset.price);
+    const existing=cart.find(i=>i.name===name);
+    if(existing){existing.qty++;}
+    else{cart.push({name,price,qty:1});}
+    renderCart();
+  }
+
+  function renderCart(){
+    const itemsDiv=document.getElementById('cartItems');
+    itemsDiv.innerHTML='';
+    let total=0;
+    cart.forEach((item,i)=>{
+      total+=item.price*item.qty;
+      itemsDiv.innerHTML+=`
+        <div class="cart-item">
+          <span>${item.name} x${item.qty}</span>
+          <span>Rp${(item.price*item.qty).toLocaleString()}</span>
+          <span style="cursor:pointer;color:red" onclick="removeItem(${i})">&times;</span>
+        </div>`;
+    });
+    document.getElementById('cartTotal').textContent=`Total: Rp${total.toLocaleString()}`;
+    document.getElementById('cartCount').textContent=cart.reduce((a,b)=>a+b.qty,0);
+  }
+
+  function removeItem(i){cart.splice(i,1);renderCart();}
+
+  function toggleCart(){document.getElementById('cartModal').classList.toggle('show');}
+
+  function checkout(){
+    if(cart.length===0){alert('Keranjang kosong');return;}
+    let message="Halo, saya ingin pesan:\n\n";
+    let total=0;
+    cart.forEach(i=>{
+      message+=`${i.name} x${i.qty} = Rp${(i.price*i.qty).toLocaleString()}\n`;
+      total+=i.price*i.qty;
+    });
+    message+=`\nTotal: Rp${total.toLocaleString()}`;
+    const url=`https://wa.me/${WHATSAPP_NUMBER}?text=${encodeURIComponent(message)}`;
+    window.open(url,'_blank');
+  }
+</script>
+</body>
+</html>
